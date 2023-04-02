@@ -7,6 +7,10 @@ model = pickle.load(open('model2.pkl','rb'))
 
 @app.route('/')
 def home():
+    return jsonify({'Stats': "Passed"})
+
+@app.route('/predict')
+def predict():
     Gender = request.form.get('Gender')
     Married = request.form.get('Married')
     Dependents = request.form.get('Dependents')
@@ -24,14 +28,17 @@ def home():
     #           'CoapplicantIncome': CoapplicantIncome, 'LoanAmount': LoanAmount, 'Loan_Amount_Term': Loan_Amount_Term,
     #           'Credit_History': Credit_History, 'Property_Area': Property_Area}
 
-    input_query = np.array([[Gender,Married,Dependents,Education,Self_Employed,ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,Property_Area]])
+    input_query = np.array([[Gender, Married, Dependents, Education, Self_Employed, ApplicantIncome, CoapplicantIncome,
+                             LoanAmount, Loan_Amount_Term, Credit_History, Property_Area]])
 
     var = model.predict(input_query)[0]
 
-    if(str(var)=="1"):
+    if (str(var) == "1"):
 
-        return jsonify({'Loan':"Passed"})
+        return jsonify({'Loan': "Passed"})
     else:
         return jsonify({'Loan': "Failed"})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
